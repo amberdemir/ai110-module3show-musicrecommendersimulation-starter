@@ -322,18 +322,13 @@ I tried a weight-shift experiment: I doubled the importance of energy (up to 2 p
 
 ---
 
-## 9. Personal Reflection  
 
-My biggest learning moment was seeing that a song’s score is just three simple parts added together: genre points, mood points, and how close its energy is to what the user wants. Once the reasons list showed where each point came from, I understood exactly why a song ranked where it did.
+## 9. Personal Reflection
 
-#2: How AI helped, and when I double-checked it
+My biggest learning moment was seeing that a song's score is just three simple parts added together: genre points, mood points, and how close its energy is to what the user wants. Once the reasons list showed where each point came from, I understood exactly why a song ranked where it did.
 
-AI helped me a lot. It wrote the scoring and ranking code, fixed my crash, and ran all five test profiles. But I had to double-check it. The first code used the wrong key names (favorite_genre instead of genre), which caused a KeyError until we checked what my real files used. I also had to check that my README on GitHub was actually correct, because I couldn’t just assume the AI’s guess was right.
+AI helped me a lot. It wrote the scoring and ranking code, fixed my crash, and ran all five test profiles. But I couldn't just trust it. When I ran the first code, I got a KeyError because the key names didn't match my files (favorite_genre instead of genre). I pasted the error back, and Claude Code read my real files and fixed it. I also read the output myself to make sure the results made sense, like Chill Lofi giving calm lofi songs.
 
-3: What surprised me about simple algorithms
+I was surprised that just three rules (genre, mood, and energy) could produce results that really felt like recommendations. Chill Lofi gave calm lofi songs, and the pop fan got upbeat pop. I was also surprised that Gym Hero kept showing up for happy pop fans even though its mood is "intense," because the genre match and high energy outweighed the mood. And when I doubled the energy weight, nothing changed at all, because genre and energy line up in a tiny catalog.
 
-I was surprised that just three rules (genre, mood, and energy) could produce results that really felt like recommendations. Chill Lofi gave calm lofi songs, and the pop fan got upbeat pop. I was also surprised that Gym Hero kept showing up for happy pop fans even though its mood is “intense,” because the genre match and high energy outweighed the mood. And when I doubled the energy weight, nothing changed at all, because genre and energy line up in a tiny catalog.
-
-4: What I would try next
-
-Next, I would add more songs so the catalog isn’t so small, and use features like tempo, valence, and danceability. I would also treat “indie pop” as close to “pop” instead of a totally different genre, and add variety to the top 5 so it isn’t the same kind of song five times.
+Next, I would add more songs so the catalog isn't so small, and use features like tempo, valence, and danceability. I would also treat "indie pop" as close to "pop" instead of a totally different genre, and add variety to the top 5 so it isn't the same kind of song five times.

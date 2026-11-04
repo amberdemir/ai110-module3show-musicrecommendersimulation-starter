@@ -121,38 +121,23 @@ Top recommendations:
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+- **Five test profiles.** I ran the recommender for five listeners: High-Energy Pop, Chill Lofi, Deep Intense Rock, Conflicted (pop, sad, energy 0.9), and Unknown Genre (k-pop). The last two were designed to trick the scoring.
+- **Weight shift.** I halved the genre points (+2.0 to +1.0) and doubled the energy points (up to +2.0). The top 5 stayed exactly the same for every profile. Only the scores changed, and the gaps between songs got smaller. This happened because genre and energy line up in such a tiny catalog: the pop songs are energetic and the lofi songs are calm. I kept the original weights.
+- **Honesty checks.** I added a warning when a user's genre or mood isn't in the catalog at all. I also added a "Weak match" label for songs that only matched on energy.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+- The catalog has only 10 songs, and only one of them is rock.
+- Genre must match exactly, so "indie pop" never counts as "pop".
+- Every song earns some energy points, so the top 5 is always full, even when most picks are weak matches.
+- It ignores lyrics, language, artist, and listening history.
 
 ---
 
 ## Reflection
 
-Read and complete `model_card.md`:
+This project showed me that a recommender turns data into a prediction by adding up points. Each song's score is just its genre points, plus its mood points, plus how close its energy is to what the user wants. The highest totals become the recommendations. Showing the reasons next to each song made this easy to see, because every point can be traced back to where it came from.
 
-[**Model Card**](model_card.md)
-
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
-
-
+It also showed me where bias can sneak in. Genre is worth the most points, so a song in the "right" genre can beat a better-fitting song from a different genre. That can favor popular genres and bury good songs from others. A tiny catalog makes this worse: with only one rock song, a rock fan mostly gets songs that just happen to have the right energy. For more detail, see the [Model Card](model_card.md).
