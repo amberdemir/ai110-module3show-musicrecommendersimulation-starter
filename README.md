@@ -43,6 +43,18 @@ Platforms like Spotify and YouTube mix two approaches. Collaborative filtering u
 **Ranking rule:** Score every song in the CSV, sort from highest to lowest, and return the top K.
 
 **Expected biases:** Genre is worth the most points, so the system may over-prioritize genre and bury great songs that match the user's mood and energy but have a different genre. It can also create a filter bubble by recommending the same kind of song over and over.
+
+
+
+## Algorithm Summary
+The recommender is content-based. It scores every song in the catalog
+against the user's taste profile. A genre match adds 2.0 points, a mood
+match adds 1.0 point, and energy adds up to 1.0 point depending on how
+close the song's energy is to the user's target (closer = more points).
+Each song ends up with a total score and a list of reasons explaining
+where the points came from. Songs are then sorted from highest to
+lowest score, and the top 5 are shown to the user.
+
 ---
 
 ## Getting Started
@@ -82,16 +94,34 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+1. Sunrise City
+   Score: 3.98
+   Reasons:
+     - genre match (+2.0)
+     - mood match (+1.0)
+     - energy closeness (+0.98)
 
-```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
-```
+2. Gym Hero
+   Score: 2.87
+   Reasons:
+     - genre match (+2.0)
+     - energy closeness (+0.87)
+
+3. Rooftop Lights
+   Score: 1.96
+   Reasons:
+     - mood match (+1.0)
+     - energy closeness (+0.96)
+
+4. Night Drive Loop
+   Score: 0.95
+   Reasons:
+     - energy closeness (+0.95)
+
+5. Storm Runner
+   Score: 0.89
+   Reasons:
+     - energy closeness (+0.89)
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
 

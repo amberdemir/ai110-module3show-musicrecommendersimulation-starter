@@ -53,10 +53,7 @@ class Recommender:
 NUMERIC_COLUMNS = ["energy", "tempo_bpm", "valence", "danceability", "acousticness"]
 
 def load_songs(csv_path: str) -> List[Dict]:
-    """
-    Loads songs from a CSV file.
-    Required by src/main.py
-    """
+    """Load songs from a CSV file, converting id and numeric columns to numbers."""
     songs = []
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -69,33 +66,25 @@ def load_songs(csv_path: str) -> List[Dict]:
 
 
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """
-    Scores a single song against user preferences.
-    Required by recommend_songs() and src/main.py
-    """
+    """Score a song against user preferences and return (score, reasons)."""
     score = 0.0
     reasons = []
     if song["genre"] == user_prefs["genre"]:
         score += 2.0
-        reasons.append("genre match")
+        reasons.append("genre match (+2.0)")
     if song["mood"] == user_prefs["mood"]:
         score += 1.0
-        reasons.append("mood match")
+        reasons.append("mood match (+1.0)")
     energy_closeness = 1.0 - abs(song["energy"] - user_prefs["energy"])
     score += energy_closeness
-    if energy_closeness >= 0.8:
-        reasons.append("energy close")
+    reasons.append(f"energy closeness (+{energy_closeness:.2f})")
     return score, reasons
 
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
-    """
-    Functional implementation of the recommendation logic.
-    Required by src/main.py
-    """
+def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, List[str]]]:
+    """Score all songs and return the top k as (song, score, reasons) tuples."""
     scored = []
     for song in songs:
         score, reasons = score_song(user_prefs, song)
-        explanation = ", ".join(reasons) if reasons else "no strong match"
-        scored.append((song, score, explanation))
+        scored.append((song, score, reasons))
     scored.sort(key=lambda item: item[1], reverse=True)
     return scored[:k]
