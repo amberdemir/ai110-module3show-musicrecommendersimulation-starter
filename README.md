@@ -11,29 +11,17 @@ Your goal is to:
 - Evaluate what your system gets right and wrong
 - Reflect on how this mirrors real world AI recommenders
 
-Replace this paragraph with your own summary of what your version does.
-
+This is a content-based music recommender. It scores every song in a small CSV catalog against a user's favorite genre, mood, and target energy, then ranks the songs and explains each recommendation with the points behind it. It runs from the command line
 ---
 
 ## How The System Works
 
-Explain your design in plain language.
-
-Some prompts to answer:
-
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
-
-You can include a simple diagram or bullet list if helpful.
 
 Platforms like Spotify and YouTube mix two approaches. Collaborative filtering uses other users' behavior (likes, skips, playlists) to find songs that people with similar taste enjoyed. Content-based filtering uses song attributes (genre, mood, energy, tempo) to find songs similar to what you already like. My version is content-based, since I only have a song catalog and one user profile
 
 **Song features:** genre, mood, energy (0.0 to 1.0), tempo_bpm
 
-**UserProfile features:** favorite_genre, favorite_mood, target_energy
+**UserProfile features:** genre, mood, energy
 
 **Algorithm Recipe (scoring one song):**
 - +2.0 points if the song's genre matches the user's favorite genre
@@ -94,6 +82,11 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
+```
+Loaded songs: 10
+
+Top recommendations:
+
 1. Sunrise City
    Score: 3.98
    Reasons:
@@ -122,8 +115,7 @@ You can add more tests in `tests/test_recommender.py`.
    Score: 0.89
    Reasons:
      - energy closeness (+0.89)
-
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
+```
 
 ---
 
