@@ -29,6 +29,20 @@ Some prompts to answer:
 
 You can include a simple diagram or bullet list if helpful.
 
+Platforms like Spotify and YouTube mix two approaches. Collaborative filtering uses other users' behavior (likes, skips, playlists) to find songs that people with similar taste enjoyed. Content-based filtering uses song attributes (genre, mood, energy, tempo) to find songs similar to what you already like. My version is content-based, since I only have a song catalog and one user profile
+
+**Song features:** genre, mood, energy (0.0 to 1.0), tempo_bpm
+
+**UserProfile features:** favorite_genre, favorite_mood, target_energy
+
+**Algorithm Recipe (scoring one song):**
+- +2.0 points if the song's genre matches the user's favorite genre
+- +1.0 point if the song's mood matches the user's favorite mood
+- Energy similarity: `1.0 - abs(song_energy - target_energy)`, so songs closer to the target earn more points (max 1.0)
+
+**Ranking rule:** Score every song in the CSV, sort from highest to lowest, and return the top K.
+
+**Expected biases:** Genre is worth the most points, so the system may over-prioritize genre and bury great songs that match the user's mood and energy but have a different genre. It can also create a filter bubble by recommending the same kind of song over and over.
 ---
 
 ## Getting Started
