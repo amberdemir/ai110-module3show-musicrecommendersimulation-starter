@@ -2,60 +2,59 @@
 
 ## 1. Model Name  
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+**TuneScout 1.0**: a tiny music scout that looks through a small song list and picks the five songs that best fit your vibe.
 
 ---
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
+TuneScout suggests the top 5 songs from a small catalog of songs stored in a spreadsheet-style file (a CSV). You tell it three things: your favorite genre, your favorite mood, and how energetic you want the music to be (from 0, very calm, to 1, very intense). It gives back five songs, each with the reasons it was picked.
 
-Prompts:  
+It is a classroom project for learning how recommenders work. It assumes a listener's taste can be described with just those three preferences.
 
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+### Non-Intended Use
+
+- **Not for real users or real music apps.** It is a learning simulation, not a finished product.
+- **Not for judging anyone's taste.** A low score only means a song didn't fit three simple rules, not that the song or the listener is "wrong".
+- **Not for large catalogs.** It was built and tested with 10 songs and checks every song one by one, so it was never designed for millions of songs.
 
 ---
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
+### Algorithm Summary
 
-Prompts:  
+TuneScout gives every song in the catalog a score by adding up points:
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
+- **Genre match: +2.0 points** if the song's genre is your favorite genre.
+- **Mood match: +1.0 point** if the song's mood is your favorite mood.
+- **Energy closeness: up to +1.0 point.** The closer the song's energy is to the energy you want, the more points it gets. A perfect match earns the full point, and a song at the opposite end earns almost nothing.
 
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+The highest possible score is 4.0. Once every song has a score, TuneScout sorts them from highest to lowest and shows the top 5. Each pick lists its reasons with their points, like "genre match (+2.0)", so you can see exactly why it was chosen.
+
+Compared with the starter code, I made it explain its reasons. I also made it warn you when your genre or mood isn't in the catalog at all, and label songs that only matched on energy as weak matches.
 
 ---
 
 ## 4. Data  
 
-Describe the dataset the model uses.  
+The catalog is `data/songs.csv`, which holds 10 songs. Each song has a title, an artist, a genre, a mood, and five number ratings: energy, tempo (beats per minute), valence (how cheerful it sounds), danceability, and acousticness (how acoustic rather than electronic it is). TuneScout only uses genre, mood, and energy. It reads the other numbers but doesn't use them yet.
 
-Prompts:  
+- **Genres:** pop, lofi, rock, ambient, jazz, synthwave, and indie pop.
+- **Moods:** happy, chill, intense, relaxed, moody, and focused.
+- **Gaps:** there is only one rock song, there are no "sad" songs, and there is no k-pop.
 
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+I did not add or remove any songs.
+
+Real musical taste includes much more than this data captures, for example lyrics, the language a song is sung in, favorite artists, and what someone has listened to before.
 
 ---
 
 ## 5. Strengths  
 
-Where does your system seem to work well  
-
-Prompts:  
-
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+- **It gets clear-cut listeners right.** For the Chill Lofi listener, the top pick was Library Rain, a calm lofi song whose energy matches exactly, which is what I expected. For the Deep Intense Rock listener, the top pick was Storm Runner, the one intense rock song, which also matched my intuition.
+- **It always shows its work.** Every recommendation lists its reasons and their points, so you never have to guess why a song was picked.
+- **It is honest about weak matches.** It warns when your genre or mood isn't in the catalog, and it labels songs that only matched on energy.
 
 ---
 
@@ -317,23 +316,24 @@ I tried a weight-shift experiment: I doubled the importance of energy (up to 2 p
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+1. **Use more of the song data.** Tempo, valence (cheerfulness), and danceability are already in the file. Using them would help tell apart songs that have the same genre and energy.
+2. **Treat similar genres as close matches.** "Indie pop" should earn some points for a pop fan instead of zero, for example half the genre points.
+3. **Add variety to the top 5.** Right now the five most energetic songs keep showing up for many different listeners. TuneScout could make sure the list doesn't repeat one artist or one kind of song too often.
 
 ---
 
 ## 9. Personal Reflection  
 
-A few sentences about your experience.  
+My biggest learning moment was seeing that a song’s score is just three simple parts added together: genre points, mood points, and how close its energy is to what the user wants. Once the reasons list showed where each point came from, I understood exactly why a song ranked where it did.
 
-Prompts:  
+#2: How AI helped, and when I double-checked it
 
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+AI helped me a lot. It wrote the scoring and ranking code, fixed my crash, and ran all five test profiles. But I had to double-check it. The first code used the wrong key names (favorite_genre instead of genre), which caused a KeyError until we checked what my real files used. I also had to check that my README on GitHub was actually correct, because I couldn’t just assume the AI’s guess was right.
+
+3: What surprised me about simple algorithms
+
+I was surprised that just three rules (genre, mood, and energy) could produce results that really felt like recommendations. Chill Lofi gave calm lofi songs, and the pop fan got upbeat pop. I was also surprised that Gym Hero kept showing up for happy pop fans even though its mood is “intense,” because the genre match and high energy outweighed the mood. And when I doubled the energy weight, nothing changed at all, because genre and energy line up in a tiny catalog.
+
+4: What I would try next
+
+Next, I would add more songs so the catalog isn’t so small, and use features like tempo, valence, and danceability. I would also treat “indie pop” as close to “pop” instead of a totally different genre, and add variety to the top 5 so it isn’t the same kind of song five times.
