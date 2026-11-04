@@ -80,6 +80,18 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     reasons.append(f"energy closeness (+{energy_closeness:.2f})")
     return score, reasons
 
+def catalog_warnings(user_prefs: Dict, songs: List[Dict]) -> List[str]:
+    """Return warnings for a preferred genre or mood that no song in the catalog has."""
+    warnings = []
+    for key in ("genre", "mood"):
+        if not any(song[key] == user_prefs[key] for song in songs):
+            warnings.append(f'Warning: no songs in the catalog have {key} "{user_prefs[key]}".')
+    return warnings
+
+def is_weak_match(user_prefs: Dict, song: Dict) -> bool:
+    """Return True if a song matches neither the user's genre nor mood."""
+    return song["genre"] != user_prefs["genre"] and song["mood"] != user_prefs["mood"]
+
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, List[str]]]:
     """Score all songs and return the top k as (song, score, reasons) tuples."""
     scored = []
